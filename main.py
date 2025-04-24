@@ -1,8 +1,11 @@
-from pimoroni import RGBLED
-from picographics import PicoGraphics, DISPLAY_PICO_DISPLAY, PEN_P4
-from machine import Pin
-import time
-from pimoroni import Button
 from picographics import PicoGraphics, DISPLAY_INKY_PACK
+import jpegdec
 
 display = PicoGraphics(display=DISPLAY_INKY_PACK)
+
+jpeg = jpegdec.JPEG(display)
+jpeg.open_file("test6.jpg")
+jpeg.decode(0, 0, dither=True)
+
+display.set_update_speed(0)
+display.update()

@@ -1,5 +1,4 @@
 {
-  "micropico.syncFolder": "pico",
   "micropico.pyIgnore": [
     "**/.picowgo",
     "**/.micropico",
