@@ -44,14 +44,16 @@ def fetch_and_display(display, jpeg):
         width, height = display.get_bounds()
         url = f"{URL}?width={width}&height={height}"
         print(url)
-        response = urequests.get(url)
-        print('here')
-        if response.status_code == 200:
-            print("Image received, displaying...")
-            display_image(display, jpeg, response.content)
-        else:
-            print("Failed to fetch image:", response.status_code)
-        response.close()
+        while True:
+            response = urequests.get(url)
+            print('here')
+            if response.status_code == 200:
+                print("Image received, displaying...")
+                display_image(display, jpeg, response.content)
+            else:
+                print("Failed to fetch image:", response.status_code)
+            response.close()
+            time.sleep(60)  # Wait for 1 minute before fetching again
     except Exception as e:
         print("Error fetching image:", e)
 
