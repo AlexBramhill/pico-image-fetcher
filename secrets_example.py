@@ -1,2 +1,3 @@
 WIFI_SSID = 'EXAMPLE'
 WIFI_PASSWORD = 'EXAMPLE'
+URL = 'http://example.com:4000'

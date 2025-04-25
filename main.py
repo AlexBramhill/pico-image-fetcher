@@ -1,11 +1,71 @@
+import network
 from picographics import PicoGraphics, DISPLAY_INKY_PACK
 import jpegdec
+import time
+import urequests
 
-display = PicoGraphics(display=DISPLAY_INKY_PACK)
+from secrets import PASSWORD, SSID, URL
 
-jpeg = jpegdec.JPEG(display)
-jpeg.open_file("test6.jpg")
-jpeg.decode(0, 0, dither=True)
 
-display.set_update_speed(0)
-display.update()
+def connect_wifi():
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    wlan.connect(SSID, PASSWORD)
+
+    print("Connecting to Wi-Fi...", end="")
+    while not wlan.isconnected():
+        time.sleep(0.5)
+        print(".", end="")
+    print("\nConnected to Wi-Fi!")
+    print("IP:", wlan.ifconfig()[0])
+
+
+def setup_display():
+    display = PicoGraphics(display=DISPLAY_INKY_PACK)
+    display.set_update_speed(0)
+    display.get_bounds
+    return display
+
+
+def setup_jpeg(display):
+    jpeg = jpegdec.JPEG(display)
+    return jpeg
+
+
+def display_image(display, jpeg, bytearray_data):
+    jpeg.open_RAM(bytearray_data)
+    jpeg.decode(0, 0, dither=True)
+    display.update()
+
+
+def fetch_and_display(display, jpeg):
+    try:
+        print("Fetching image...")
+        width, height = display.get_bounds()
+        response = urequests.get(f"{URL}?width={width}&height={height}")
+        if response.status_code == 200:
+            print("Image received, displaying...")
+
+            display_image(display, jpeg, response.content)
+        else:
+            print("Failed to fetch image:", response.status_code)
+        response.close()
+    except Exception as e:
+        print("Error fetching image:", e)
+
+
+def main():
+    connect_wifi()
+    display = setup_display()
+    jpeg = setup_jpeg(display)
+
+    while True:
+        now = time.localtime()
+        seconds_to_wait = 60 - now[5]
+        print(f"Waiting {seconds_to_wait}s until next fetch...")
+        time.sleep(seconds_to_wait)
+        fetch_and_display(display, jpeg)
+        time.sleep(60)
+
+
+main()
