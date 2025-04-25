@@ -23,7 +23,6 @@ def connect_wifi():
 def setup_display():
     display = PicoGraphics(display=DISPLAY_INKY_PACK)
     display.set_update_speed(0)
-    display.get_bounds
     return display
 
 
@@ -33,8 +32,9 @@ def setup_jpeg(display):
 
 
 def display_image(display, jpeg, bytearray_data):
+    print(bytearray_data)
     jpeg.open_RAM(bytearray_data)
-    jpeg.decode(0, 0, dither=True)
+    jpeg.decode(0, 0, dither=False)
     display.update()
 
 
@@ -42,10 +42,12 @@ def fetch_and_display(display, jpeg):
     try:
         print("Fetching image...")
         width, height = display.get_bounds()
-        response = urequests.get(f"{URL}?width={width}&height={height}")
+        url = f"{URL}?width={width}&height={height}"
+        print(url)
+        response = urequests.get(url)
+        print('here')
         if response.status_code == 200:
             print("Image received, displaying...")
-
             display_image(display, jpeg, response.content)
         else:
             print("Failed to fetch image:", response.status_code)
@@ -58,14 +60,7 @@ def main():
     connect_wifi()
     display = setup_display()
     jpeg = setup_jpeg(display)
-
-    while True:
-        now = time.localtime()
-        seconds_to_wait = 60 - now[5]
-        print(f"Waiting {seconds_to_wait}s until next fetch...")
-        time.sleep(seconds_to_wait)
-        fetch_and_display(display, jpeg)
-        time.sleep(60)
+    fetch_and_display(display, jpeg)
 
 
 main()
