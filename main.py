@@ -7,6 +7,18 @@ import urequests
 from secrets import PASSWORD, SSID, URL
 
 
+def connect_wifi():
+    wlan = network.WLAN(network.STA_IF)
+    wlan.active(True)
+    wlan.connect(SSID, PASSWORD)
+
+    print("Connecting to Wi-Fi...", end="")
+    while not wlan.isconnected():
+        time.sleep(0.5)
+        print(".", end="")
+    print("\nConnected to Wi-Fi!")
+    print("IP:", wlan.ifconfig()[0])
+
 
 def setup_display():
     display = PicoGraphics(display=DISPLAY_INKY_PACK)
@@ -27,23 +39,30 @@ def display_image(display, jpeg, bytearray_data):
 
 
 def fetch_and_display(display, jpeg):
-    try:
-        print("Fetching image...")
-        width, height = display.get_bounds()
-        url = f"{URL}?width={width}&height={height}"
-        print(url)
-        while True:
+    print("Fetching image...")
+    width, height = display.get_bounds()
+    url = f"{URL}?width={width}&height={height}"
+    print(url)
+    while True:
+        try:
+            now = time.localtime()
+            print("Time: {}:{}:{}".format(now[3], now[4], now[5]))
+            if time.time() % 60 != 0:
+                print("Waiting for the right time...")
+                time.sleep(1)
+                continue
+            print("right time {}:{}:{}".format(now[3], now[4], now[5]))
             response = urequests.get(url)
-            print('here')
             if response.status_code == 200:
                 print("Image received, displaying...")
                 display_image(display, jpeg, response.content)
             else:
                 print("Failed to fetch image:", response.status_code)
             response.close()
-            time.sleep(60)  # Wait for 1 minute before fetching again
-    except Exception as e:
-        print("Error fetching image:", e)
+            print("Updated, Waiting for the right time...")
+            time.sleep(1)
+        except Exception as e:
+            print("Error fetching image:", e)
 
 
 def main():
