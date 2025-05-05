@@ -1,6 +1,6 @@
 import network
-from picographics import PicoGraphics, DISPLAY_INKY_PACK
-import jpegdec
+from picographics import PEN_1BIT, PicoGraphics, DISPLAY_INKY_PACK
+import pngdec
 import time
 import urequests
 
@@ -21,24 +21,12 @@ def connect_wifi():
 
 
 def setup_display():
-    display = PicoGraphics(display=DISPLAY_INKY_PACK)
+    display = PicoGraphics(display=DISPLAY_INKY_PACK,  pen_type=PEN_1BIT)
     display.set_update_speed(0)
     return display
 
 
-def setup_jpeg(display):
-    jpeg = jpegdec.JPEG(display)
-    return jpeg
-
-
-def display_image(display, jpeg, bytearray_data):
-    print(bytearray_data)
-    jpeg.open_RAM(bytearray_data)
-    jpeg.decode(0, 0, dither=False)
-    display.update()
-
-
-def fetch_and_display(display, jpeg):
+def fetch_and_display(display, pngdecInstance):
     print("Fetching image...")
     width, height = display.get_bounds()
     url = f"{URL}?width={width}&height={height}"
@@ -55,7 +43,7 @@ def fetch_and_display(display, jpeg):
             response = urequests.get(url)
             if response.status_code == 200:
                 print("Image received, displaying...")
-                display_image(display, jpeg, response.content)
+                display_png(display, pngdecInstance, response.content)
             else:
                 print("Failed to fetch image:", response.status_code)
             response.close()
@@ -65,11 +53,18 @@ def fetch_and_display(display, jpeg):
             print("Error fetching image:", e)
 
 
+def display_png(display, pngdecInstance, path):
+    with open(path, "rb") as f:
+        pngdecInstance.open_RAM(f.read())
+    pngdecInstance.decode(0, 0)
+    display.update()
+
+
 def main():
-    connect_wifi()
     display = setup_display()
-    jpeg = setup_jpeg(display)
-    fetch_and_display(display, jpeg)
+    connect_wifi()
+    pngdecInstance = pngdec.PNG(display)
+    fetch_and_display(display, pngdecInstance)
 
 
 main()
