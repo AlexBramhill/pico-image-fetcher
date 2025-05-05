@@ -1,3 +1,4 @@
 WIFI_SSID = 'EXAMPLE'
 WIFI_PASSWORD = 'EXAMPLE'
-URL = 'http://example.com:4000'
+# The below url must have a slash
+URL = 'http://example.com:4000/'
