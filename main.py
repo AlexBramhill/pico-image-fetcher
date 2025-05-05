@@ -77,8 +77,7 @@ def main():
     display = setup_display()
     connect_wifi()
     pngdecInstance = pngdec.PNG(display)
-    fetch_and_display_image(display, pngdecInstance)
-    # fetch_and_display_job(display, pngdecInstance)
+    fetch_and_display_job(display, pngdecInstance)
 
 
 main()
