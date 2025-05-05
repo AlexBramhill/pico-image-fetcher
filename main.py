@@ -26,11 +26,7 @@ def setup_display():
     return display
 
 
-def fetch_and_display(display, pngdecInstance):
-    print("Fetching image...")
-    width, height = display.get_bounds()
-    url = f"{URL}?width={width}&height={height}"
-    print(url)
+def fetch_and_display_job(display, pngdecInstance):
     while True:
         try:
             now = time.localtime()
@@ -40,22 +36,42 @@ def fetch_and_display(display, pngdecInstance):
                 time.sleep(1)
                 continue
             print("right time {}:{}:{}".format(now[3], now[4], now[5]))
-            response = urequests.get(url)
-            if response.status_code == 200:
-                print("Image received, displaying...")
-                display_png(display, pngdecInstance, response.content)
-            else:
-                print("Failed to fetch image:", response.status_code)
-            response.close()
+            fetch_and_display_image(display, pngdecInstance)
             print("Updated, Waiting for the right time...")
             time.sleep(1)
         except Exception as e:
             print("Error fetching image:", e)
 
 
-def display_png(display, pngdecInstance, path):
+def fetch_and_display_image(display, pngdecInstance):
+    width, height = display.get_bounds()
+    url = f"{URL}?width={width}&height={height}&format=jpeg"
+
+    print("Fetching image...")
+    print(url)
+    try:
+        response = urequests.get(url)
+    except Exception as e:
+        print("Error fetching image AHH:", e)
+        return
+    print("Response code:", response.status_code)
+    if response.status_code == 200:
+        print("Image received, displaying...")
+        display_png(display, pngdecInstance, response.content)
+    else:
+        print("Failed to fetch image:", response.status_code)
+    response.close()
+
+
+def display_png_from_file(display, pngdecInstance, path):
     with open(path, "rb") as f:
         pngdecInstance.open_RAM(f.read())
+        pngdecInstance.decode(0, 0)
+    display.update()
+
+
+def display_png(display, pngdecInstance, image_bytes):
+    pngdecInstance.open_RAM(image_bytes)
     pngdecInstance.decode(0, 0)
     display.update()
 
@@ -64,7 +80,8 @@ def main():
     display = setup_display()
     connect_wifi()
     pngdecInstance = pngdec.PNG(display)
-    fetch_and_display(display, pngdecInstance)
+    fetch_and_display_image(display, pngdecInstance)
+    # fetch_and_display_job(display, pngdecInstance)
 
 
 main()
