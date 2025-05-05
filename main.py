@@ -28,31 +28,28 @@ def setup_display():
 
 def fetch_and_display_job(display, pngdecInstance):
     while True:
-        try:
-            now = time.localtime()
-            print("Time: {}:{}:{}".format(now[3], now[4], now[5]))
-            if time.time() % 60 != 0:
-                print("Waiting for the right time...")
-                time.sleep(1)
-                continue
-            print("right time {}:{}:{}".format(now[3], now[4], now[5]))
-            fetch_and_display_image(display, pngdecInstance)
-            print("Updated, Waiting for the right time...")
+        now = time.localtime()
+        print("Time: {}:{}:{}".format(now[3], now[4], now[5]))
+        if time.time() % 60 != 0:
+            print("Waiting for the right time...")
             time.sleep(1)
-        except Exception as e:
-            print("Error fetching image:", e)
+            continue
+        print("right time {}:{}:{}".format(now[3], now[4], now[5]))
+        fetch_and_display_image(display, pngdecInstance)
+        print("Updated, Waiting for the right time...")
+        time.sleep(1)
 
 
 def fetch_and_display_image(display, pngdecInstance):
     width, height = display.get_bounds()
-    url = f"{URL}?width={width}&height={height}&format=jpeg"
+    url = f"{URL}?width={width}&height={height}&format=png"
 
     print("Fetching image...")
     print(url)
     try:
         response = urequests.get(url)
     except Exception as e:
-        print("Error fetching image AHH:", e)
+        print("Error fetching image:", e)
         return
     print("Response code:", response.status_code)
     if response.status_code == 200:
