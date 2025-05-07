@@ -4,26 +4,9 @@ import pngdec
 import time
 import urequests
 
-from secrets import PASSWORD, SSID, URL
-
-
-def connect_wifi():
-    wlan = network.WLAN(network.STA_IF)
-    wlan.active(True)
-    wlan.connect(SSID, PASSWORD)
-
-    print("Connecting to Wi-Fi...", end="")
-    while not wlan.isconnected():
-        time.sleep(0.5)
-        print(".", end="")
-    print("\nConnected to Wi-Fi!")
-    print("IP:", wlan.ifconfig()[0])
-
-
-def setup_display():
-    display = PicoGraphics(display=DISPLAY_INKY_PACK,  pen_type=PEN_1BIT)
-    display.set_update_speed(0)
-    return display
+import display_factory
+from secrets import URL
+import wifi_service
 
 
 def fetch_and_display_job(display, pngdecInstance):
@@ -48,6 +31,16 @@ def fetch_and_display_image(display, pngdecInstance):
     print(url)
     try:
         response = urequests.get(url)
+        date_header = response.headers.get("Date", None)
+        if date_header:
+            print("Date from header:", date_header)
+            try:
+            parsed_date = time.strptime(
+                date_header, "%a, %d %b %Y %H:%M:%S %Z")
+            print("Parsed date:", parsed_date)
+            except Exception as e:
+            print("Error parsing date:", e)
+        print(f"{response}")
     except Exception as e:
         print("Error fetching image:", e)
         return
@@ -74,9 +67,12 @@ def display_png(display, pngdecInstance, image_bytes):
 
 
 def main():
-    display = setup_display()
-    connect_wifi()
+    display = display_factory.init()
     pngdecInstance = pngdec.PNG(display)
+    wifi_service.connect_wifi()
+    # initial load
+    fetch_and_display_image(display, pngdecInstance)
+
     fetch_and_display_job(display, pngdecInstance)
 
 
