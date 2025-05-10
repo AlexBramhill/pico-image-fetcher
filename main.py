@@ -9,9 +9,9 @@ import utime
 from image_client import ImageClient
 from image_renderer.png_renderer import Png_Renderer
 from secrets import URL
-from wifi_manager import WiFiManager, connect_wifi
+from wifi_manager import WiFiManager
 from src.cron_scheduler import CronScheduler
-from display_controller_factory import DisplayConfig, DisplayController, DisplayControllerFactory
+from display_controller_factory import DisplayConfig, DisplayControllerFactory
 
 
 # def fetch_and_display_job(display, pngdecInstance):
