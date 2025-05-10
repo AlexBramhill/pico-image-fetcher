@@ -28,7 +28,7 @@ def main():
         image_renderer=image_renderer,
     )
 
-    print("Initailisation complete")
+    print("Initialisation complete")
 
     interaction_controller.fetch_and_display_image()
 
