@@ -8,6 +8,7 @@ import utime
 # import scheduler
 from image_client import ImageClient
 from image_renderer.png_renderer import Png_Renderer
+from interaction_controller import InteractionController
 from secrets import URL
 from wifi_manager import WiFiManager
 from src.cron_scheduler import CronScheduler
@@ -90,7 +91,11 @@ def main():
     wifi_service = WiFiManager()
     scheduler = CronScheduler()
     image_client = ImageClient()
-    
+    interaction_controller = InteractionController(
+        wifi_manager=wifi_service,
+        image_client=image_client,
+        displayController=displayController,
+    )
     wifi_service.connect()
 
     scheduler.add_schedule(

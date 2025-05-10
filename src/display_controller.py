@@ -16,3 +16,6 @@ class DisplayController:
             raise ValueError(
                 "Image renderer class is not set in the configuration.")
         return self._image_renderer
+
+    def get_display(self) -> PicoGraphics:
+        return self._display

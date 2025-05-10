@@ -6,6 +6,13 @@ from image_renderer.image_renderer import ImageRendererAbstract
 from secrets import URL
 
 
+class ImageClientGetConfig:
+    def __init__(self, width=None, height=None, image_format=None):
+        self.width = width
+        self.height = height
+        self.image_format = image_format
+
+
 class ImageClient:
     _instance = None
 
@@ -34,11 +41,10 @@ class ImageClient:
 
         return response
 
-    def get(self, display: PicoGraphics, image_renderer: ImageRendererAbstract):
+    def get(self, config: ImageClientGetConfig):
         try:
-            width, height = display.get_bounds()
-            image_format = image_renderer.get_required_file_format()
-            response = self._make_request(width, height, image_format)
+            response = self._make_request(
+                config.width, config.height, config.image_format)
 
             content = response.content
             response.close()
@@ -47,13 +53,12 @@ class ImageClient:
             print("ImageClient get error:", e, file=sys.stderr)
         return None
 
+    def get_time_from_http_request_header(self):
+        response = self._make_request()
 
-def get_time_from_http_request_header(self):
-    response = self._make_request()
-
-    date_str = response.headers.get("Date")
-    if date_str:
-        # Example: 'Fri, 08 May 2025 12:34:56 GMT'
-        return time.strptime(
-            date_str, "%a, %d %b %Y %H:%M:%S GMT")
-    response.close()
+        date_str = response.headers.get("Date")
+        if date_str:
+            # Example: 'Fri, 08 May 2025 12:34:56 GMT'
+            return time.strptime(
+                date_str, "%a, %d %b %Y %H:%M:%S GMT")
+        response.close()
