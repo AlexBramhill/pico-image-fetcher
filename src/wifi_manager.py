@@ -14,8 +14,8 @@ class WiFiManager:
 
     def __init__(self):
         if not self._initialised:
-            self._wlan.active(True)
             self._wlan = network.WLAN(network.STA_IF)
+            self._wlan.active(True)
             self._initialised = True
 
     def connect(self):

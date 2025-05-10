@@ -1,5 +1,5 @@
 
-from image_renderer.image_renderer import ImageRendererAbstract
+from src.image_renderer.image_renderer import ImageRendererAbstract
 
 
 class DisplayConfig:

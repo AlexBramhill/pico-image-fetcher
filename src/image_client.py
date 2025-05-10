@@ -1,8 +1,7 @@
-from picographics import PicoGraphics
 import time
 import urequests
 import sys
-from image_renderer.image_renderer import ImageRendererAbstract
+from src.image_renderer.image_renderer import ImageRendererAbstract
 from secrets import URL
 
 

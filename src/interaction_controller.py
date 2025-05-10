@@ -1,16 +1,15 @@
-from display_controller import DisplayController
-from image_client import ImageClient, ImageClientGetConfig
-from image_renderer.image_renderer import ImageRendererAbstract
-from wifi_manager import WiFiManager
+from picographics import PicoGraphics
+from src.image_client import ImageClient, ImageClientGetConfig
+from src.image_renderer.image_renderer import ImageRendererAbstract
+from src.wifi_manager import WiFiManager
 
 
 class InteractionController:
-    def __init__(self, wifi_manager: WiFiManager, image_client: ImageClient, displayController: DisplayController, image_renderer: ImageRendererAbstract):
+    def __init__(self, wifi_manager: WiFiManager, image_client: ImageClient, display: PicoGraphics, image_renderer: ImageRendererAbstract):
         self._wifi_manager = wifi_manager
         self._image_client = image_client
-        self._displayController = displayController
-        self._display = displayController.get_display()
-        self._image_renderer = displayController.get_image_renderer()
+        self._display = display
+        self._image_renderer = image_renderer
 
     def fetch_and_display_image(self):
         try:

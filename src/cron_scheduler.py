@@ -50,7 +50,7 @@ class CronScheduler:
             raise ValueError(
                 "Expected 6 fields: sec min hour day month weekday")
 
-        parsed = [
+        parsed_cron_values = [
             self._parse_cron_field(fields[0], 0, 59),
             self._parse_cron_field(fields[1], 0, 59),
             self._parse_cron_field(fields[2], 0, 23),
@@ -59,7 +59,7 @@ class CronScheduler:
             self._parse_cron_field(fields[5], 0, 6),
         ]
 
-        self._tasks.append((callback, parsed))
+        self._tasks.append((callback, parsed_cron_values))
         return self
 
     def run_scheduler(self):
@@ -67,8 +67,8 @@ class CronScheduler:
         while True:
             now = utime.localtime()
             if now != last_time:
-                for callback, cron_parts in self._tasks:
-                    if self._matches_cron(now, cron_parts):
+                for callback, cron_value in self._tasks:
+                    if self._matches_cron(now, cron_value):
                         callback()
                 last_time = now
             utime.sleep(1)
