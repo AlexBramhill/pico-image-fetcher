@@ -1,7 +1,6 @@
 from picographics import PicoGraphics
 
 from src.display_config import DisplayConfig
-from src.image_renderer.image_renderer import ImageRendererAbstract
 
 
 class DisplayFactory:
@@ -12,4 +11,5 @@ class DisplayFactory:
         if DisplayFactory._instance is None:
             DisplayFactory._instance = PicoGraphics(
                 config.display, config.pen_type)
+            DisplayFactory._instance.set_update_speed(1)
         return DisplayFactory._instance

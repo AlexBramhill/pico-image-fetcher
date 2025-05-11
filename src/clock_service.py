@@ -20,9 +20,10 @@ class ClockService:
         date = request_header.get("Date")
         if not date:
             raise ValueError("No Date header in response")
-        print("Date header:", date)
+
         date_without_day = date.split(", ")[1]
         split_date = date_without_day.split(" ")
+
         rtc_formatted_date = {
             "year": int(split_date[2]),
             "month": int(MONTH_MAP[split_date[1]]),
@@ -32,17 +33,14 @@ class ClockService:
             "seconds": int(split_date[3].split(":")[2]),
             "subseconds": 59
         }
-        print("Date header without day:", rtc_formatted_date)
+
         self.set_time(rtc_formatted_date)
 
     def set_time(self, new_time):
-        print('Setting time')
-        print(new_time)
         self.rtc.datetime((new_time["year"], new_time["month"],
                            new_time["day"], 0, new_time["hour"], new_time["minute"], new_time["seconds"], new_time["subseconds"]))
         self._rtc_initialised = True
-        print('time set')
-        print(self.rtc.datetime())
+        print(f'RTC time set to: {self.rtc.datetime()}')
 
     def is_time_set(self):
         return self._rtc_initialised

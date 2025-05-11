@@ -43,7 +43,7 @@ print("Initial fetches complete")
 
 scheduler.add_scheduled_job(
     lambda: interaction_controller.fetch_and_render_page(),
-    "* * * * * *",
+    "0 * * * * *",
     fail_silently=True,
 ).run_scheduler()
 
