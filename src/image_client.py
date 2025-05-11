@@ -34,6 +34,7 @@ class ImageClient:
         if params:
             url += "?" + "&".join(params)
 
+        print("Making request to URL:", url)
         response = urequests.get(url)
         if not response:
             raise ValueError("Failed to get response from server.")

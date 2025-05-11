@@ -11,5 +11,10 @@ class DisplayFactory:
         if DisplayFactory._instance is None:
             DisplayFactory._instance = PicoGraphics(
                 config.display, config.pen_type)
-            DisplayFactory._instance.set_update_speed(1)
+
+            try:
+                DisplayFactory._instance.set_update_speed(1)
+            except ValueError:
+                print("Display does not support set_update_speed, skipping")
+
         return DisplayFactory._instance

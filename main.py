@@ -1,15 +1,16 @@
 from picographics import PEN_1BIT, DISPLAY_INKY_PACK
 
 import secrets
+
 from src.clock_service import ClockService
+from src.display_configs import get_display_config
 from src.image_client import ImageClient
 from src.image_renderer.png_renderer import PngRenderer
 from src.image_renderer.jpeg_renderer import JpegRenderer
 from src.interaction_controller import InteractionController
-from secrets import URL
 from src.wifi_manager import WiFiManager
 from src.cron_scheduler import CronScheduler
-from src.display_factory import DisplayConfig, DisplayFactory
+from src.display_factory import DisplayFactory
 
 
 def main():
@@ -20,9 +21,9 @@ clock_service = ClockService()
 wifi_manager = WiFiManager()
 scheduler = CronScheduler()
 image_client = ImageClient()
-inky_display_config = DisplayConfig(
-    display=DISPLAY_INKY_PACK, pen_type=PEN_1BIT)
-display = DisplayFactory.get_instance(inky_display_config)
+display = DisplayFactory.get_instance(get_display_config(
+    secrets.DISPLAY_TYPE
+))
 
 image_renderer = PngRenderer(
     display) if secrets.IMAGE_RENDERER == "png" else JpegRenderer(display)
