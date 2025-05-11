@@ -1,11 +1,48 @@
 import machine
 
+from src.calender import MONTH_MAP
 
-def set_time(new_time):
-    rtc = machine.RTC()
-    print('Setting time')
-    print(new_time)
-    # (year, month, day, weekday, hours, minutes, seconds, subseconds)
-    rtc.datetime((new_time["year"], new_time["month"],
-                  new_time["day"], 0, new_time["hour"], new_time["minute"], new_time["seconds"], new_time["subseconds"]))
-    print('time set')
+
+class ClockService:
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(ClockService, cls).__new__(cls)
+        return cls._instance
+
+    def __init__(self):
+        if not hasattr(self, 'rtc'):
+            self.rtc = machine.RTC()
+            self._rtc_initialised = False
+
+    def set_time_from_header(self, request_header):
+        date = request_header.get("Date")
+        if not date:
+            raise ValueError("No Date header in response")
+        print("Date header:", date)
+        date_without_day = date.split(", ")[1]
+        split_date = date_without_day.split(" ")
+        rtc_formatted_date = {
+            "year": int(split_date[2]),
+            "month": int(MONTH_MAP[split_date[1]]),
+            "day": int(split_date[0]),
+            "hour": int(split_date[3].split(":")[0]),
+            "minute": int(split_date[3].split(":")[1]),
+            "seconds": int(split_date[3].split(":")[2]),
+            "subseconds": 59
+        }
+        print("Date header without day:", rtc_formatted_date)
+        self.set_time(rtc_formatted_date)
+
+    def set_time(self, new_time):
+        print('Setting time')
+        print(new_time)
+        self.rtc.datetime((new_time["year"], new_time["month"],
+                           new_time["day"], 0, new_time["hour"], new_time["minute"], new_time["seconds"], new_time["subseconds"]))
+        self._rtc_initialised = True
+        print('time set')
+        print(self.rtc.datetime())
+
+    def is_time_set(self):
+        return self._rtc_initialised

@@ -42,22 +42,9 @@ class ImageClient:
 
     def get(self, config: ImageClientGetConfig):
         try:
-            response = self._make_request(
+            return self._make_request(
                 config.width, config.height, config.image_format)
 
-            content = response.content
-            response.close()
-            return content
         except Exception as e:
             print("ImageClient get error:", e, file=sys.stderr)
-        return None
-
-    def get_time_from_http_request_header(self):
-        response = self._make_request()
-
-        date_str = response.headers.get("Date")
-        if date_str:
-            # Example: 'Fri, 08 May 2025 12:34:56 GMT'
-            return time.strptime(
-                date_str, "%a, %d %b %Y %H:%M:%S GMT")
-        response.close()
+            return None
