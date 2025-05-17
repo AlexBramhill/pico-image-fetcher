@@ -1,5 +1,6 @@
+import machine
 import network
-import time
+import utime
 from secrets import PASSWORD, SSID
 
 
@@ -21,9 +22,16 @@ class WiFiManager:
     def connect(self):
         if not self._wlan.isconnected():
             print("Connecting to Wi-Fi...", end="")
+
+            startTime = utime.time()
+            maxWaitTimeInSeconds = 60
+
             self._wlan.connect(SSID, PASSWORD)
             while not self._wlan.isconnected():
-                time.sleep(0.5)
+                if (utime.time() > (startTime + maxWaitTimeInSeconds)):
+                    raise RuntimeError(
+                        f"Failed to connect to Wi-Fi within {maxWaitTimeInSeconds} seconds.")
+                utime.sleep(0.5)
                 print(".", end="")
             print("\nConnected to Wi-Fi!")
         else:
