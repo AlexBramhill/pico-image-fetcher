@@ -13,7 +13,7 @@ class DisplayFactory:
                 config.display, config.pen_type)
 
             try:
-                DisplayFactory._instance.set_update_speed(2)
+                DisplayFactory._instance.set_update_speed(1)
             except ValueError:
                 print("Display does not support set_update_speed, skipping")
 
