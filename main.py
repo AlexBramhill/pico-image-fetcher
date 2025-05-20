@@ -16,37 +16,36 @@ from src.display_factory import DisplayFactory
 def main():
     print("Starting up")
 
+    clock_service = ClockService()
+    wifi_manager = WiFiManager()
+    scheduler = CronScheduler()
+    image_client = ImageClient()
+    display = DisplayFactory.get_instance(get_display_config(
+        secrets.DISPLAY_TYPE
+    ))
 
-clock_service = ClockService()
-wifi_manager = WiFiManager()
-scheduler = CronScheduler()
-image_client = ImageClient()
-display = DisplayFactory.get_instance(get_display_config(
-    secrets.DISPLAY_TYPE
-))
+    image_renderer = PngRenderer(
+        display) if secrets.IMAGE_RENDERER == "png" else JpegRenderer(display)
 
-image_renderer = PngRenderer(
-    display) if secrets.IMAGE_RENDERER == "png" else JpegRenderer(display)
+    interaction_controller = InteractionController(
+        wifi_manager=wifi_manager,
+        image_client=image_client,
+        display=display,
+        image_renderer=image_renderer,
+        clock_service=clock_service,
+    )
 
-interaction_controller = InteractionController(
-    wifi_manager=wifi_manager,
-    image_client=image_client,
-    display=display,
-    image_renderer=image_renderer,
-    clock_service=clock_service,
-)
+    print("Dependency initialisation complete")
 
-print("Dependency initialisation complete")
+    print("Initial fetches")
+    interaction_controller.fetch_and_render_page()
+    print("Initial fetches complete")
 
-print("Initial fetches")
-interaction_controller.fetch_and_render_page()
-print("Initial fetches complete")
-
-scheduler.add_scheduled_job(
-    lambda: interaction_controller.fetch_and_render_page(),
-    "0 * * * * *",
-    fail_silently=True,
-).run_scheduler()
+    scheduler.add_scheduled_job(
+        lambda: interaction_controller.fetch_and_render_page(),
+        "0 * * * * *",
+        fail_silently=True,
+    ).run_scheduler()
 
 
 main()
