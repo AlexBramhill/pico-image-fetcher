@@ -20,7 +20,7 @@ class ImageClient:
             cls._instance = super(ImageClient, cls).__new__(cls)
         return cls._instance
 
-    def _make_request(self, width=None, height=None, image_format=None):
+    def _make_request(self, width=None, height=None, image_format=None, timeout_in_seconds=30):
         url = URL
         params = []
 
@@ -35,7 +35,7 @@ class ImageClient:
             url += "?" + "&".join(params)
 
         print("Making request to URL:", url)
-        response = urequests.get(url)
+        response = urequests.get(url, timeout=timeout_in_seconds)
         if not response:
             raise ValueError("Failed to get response from server.")
 
