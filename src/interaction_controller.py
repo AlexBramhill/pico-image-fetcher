@@ -1,5 +1,5 @@
 from picographics import PicoGraphics
-import utime
+from src.display.display import DisplayAbstract
 from src.clock_service import ClockService
 from src.image_client import ImageClient, ImageClientGetConfig
 from src.image_renderer.image_renderer import ImageRendererAbstract
@@ -10,7 +10,7 @@ class InteractionController:
     def __init__(self,
                  wifi_manager: WiFiManager,
                  image_client: ImageClient,
-                 display: PicoGraphics,
+                 display: DisplayAbstract,
                  image_renderer: ImageRendererAbstract,
                  clock_service: ClockService):
         self._wifi_manager = wifi_manager
@@ -28,7 +28,7 @@ class InteractionController:
             config = ImageClientGetConfig(
                 width=width,
                 height=height,
-                image_format=self._image_renderer.get_required_file_format(),
+                image_format=self._image_renderer.get_image_type(),
             )
 
             response = self._image_client.get(config)

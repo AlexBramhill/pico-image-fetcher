@@ -1,16 +1,16 @@
-from picographics import PEN_1BIT, DISPLAY_INKY_PACK
-
+import config
+from src.image_renderer.image_renderer_factory import ImageRendererFactory
+from src.display.configs.display_configs import display_configs
+from src.display.display_factory import DisplayFactory
 import secrets
 
 from src.clock_service import ClockService
-from src.display_configs import get_display_config
 from src.image_client import ImageClient
-from src.image_renderer.png_renderer import PngRenderer
-from src.image_renderer.jpeg_renderer import JpegRenderer
+from src.image_renderer.pimoroni_png_renderer import PimoroniPngRenderer
+from src.image_renderer.pimoroni_jpeg_renderer import PimoroniJpegRenderer
 from src.interaction_controller import InteractionController
 from src.wifi_manager import WiFiManager
 from src.cron_scheduler import CronScheduler
-from src.display_factory import DisplayFactory
 
 
 def main():
@@ -20,13 +20,14 @@ def main():
     wifi_manager = WiFiManager()
     scheduler = CronScheduler()
     image_client = ImageClient()
-    display = DisplayFactory.get_instance(get_display_config(
-        secrets.DISPLAY_TYPE
-    ))
 
-    image_renderer = PngRenderer(
-        display) if secrets.IMAGE_RENDERER == "png" else JpegRenderer(display)
+    display = DisplayFactory.create(
+        display_configs[config.DISPLAY_TO_USE](config.IMAGE_FORMAT_TO_USE))
 
+    image_renderer = ImageRendererFactory.create_renderer(
+        display=display,
+        image_type=config.IMAGE_FORMAT_TO_USE,
+    )
     interaction_controller = InteractionController(
         wifi_manager=wifi_manager,
         image_client=image_client,
