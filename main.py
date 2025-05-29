@@ -44,7 +44,7 @@ def main():
 
     scheduler.add_scheduled_job(
         lambda: interaction_controller.fetch_and_render_page(),
-        "0 * * * * *",
+        run_as_fast_as_possible=True,
         fail_silently=True,
         display_focused=True,
         is_display_ready_to_update=lambda: display.is_ready_to_update(),
