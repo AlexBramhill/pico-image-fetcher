@@ -44,7 +44,7 @@ class CronScheduler:
             now[6] in weekday
         )
 
-    def add_scheduled_job(self, callback, cron_expression, fail_silently=False):
+    def add_scheduled_job(self, callback, cron_expression, fail_silently=False, display_focused=False, is_display_ready_to_update=None):
         fields = cron_expression.strip().split()
         if len(fields) != 6:
             raise ValueError(
@@ -59,7 +59,8 @@ class CronScheduler:
             self._parse_cron_field(fields[5], 0, 6),
         ]
 
-        self._tasks.append((callback, parsed_cron_values, fail_silently))
+        self._tasks.append((callback, parsed_cron_values, fail_silently,
+                           display_focused, is_display_ready_to_update))
         return self
 
     def run_scheduler(self):
@@ -67,7 +68,11 @@ class CronScheduler:
         while True:
             now = utime.localtime()
             if now != last_time:
-                for callback, cron_value, fail_silently in self._tasks:
+                for callback, cron_value, fail_silently, display_focused, is_display_ready_to_update in self._tasks:
+                    if display_focused and (is_display_ready_to_update() is not True):
+                        print("Display not ready, skipping scheduled task")
+                        continue
+
                     if self._matches_cron(now, cron_value):
                         print("Running a scheduled task")
                         if (not fail_silently):

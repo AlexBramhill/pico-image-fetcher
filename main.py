@@ -46,6 +46,9 @@ def main():
         lambda: interaction_controller.fetch_and_render_page(),
         "0 * * * * *",
         fail_silently=True,
+        display_focused=True,
+        is_display_ready_to_update=lambda: display.is_ready_to_update(),
+
     ).run_scheduler()
 
 
