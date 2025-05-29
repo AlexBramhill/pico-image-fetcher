@@ -1,15 +1,16 @@
 import time
 import urequests
 import sys
+from src.image_renderer.image_types import IMAGE_TYPE
 from src.image_renderer.image_renderer import ImageRendererAbstract
 from secrets import URL
 
 
 class ImageClientGetConfig:
-    def __init__(self, width=None, height=None, image_format=None):
+    def __init__(self, image_type, width, height):
         self.width = width
         self.height = height
-        self.image_format = image_format
+        self.image_type = image_type
 
 
 class ImageClient:
@@ -24,12 +25,9 @@ class ImageClient:
         url = URL
         params = []
 
-        if width is not None:
-            params.append(f"width={width}")
-        if height is not None:
-            params.append(f"height={height}")
-        if image_format is not None:
-            params.append(f"format={image_format}")
+        params.append(f"width={width}")
+        params.append(f"height={height}")
+        params.append(f"format={image_format}")
 
         if params:
             url += "?" + "&".join(params)
@@ -41,10 +39,18 @@ class ImageClient:
 
         return response
 
+    def _get_image_type_value(self, image_type: int):
+        if (image_type == IMAGE_TYPE.PNG):
+            return "png"
+        elif (image_type == IMAGE_TYPE.JPG):
+            return "jpg"
+        else:
+            raise ValueError(f"Unsupported image type: {image_type}")
+
     def get(self, config: ImageClientGetConfig):
         try:
             return self._make_request(
-                config.width, config.height, config.image_format)
+                config.width, config.height, self._get_image_type_value(config.image_type))
 
         except Exception as e:
             print("ImageClient get error:", e, file=sys.stderr)

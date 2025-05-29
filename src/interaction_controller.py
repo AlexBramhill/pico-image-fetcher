@@ -28,13 +28,17 @@ class InteractionController:
             config = ImageClientGetConfig(
                 width=width,
                 height=height,
-                image_format=self._image_renderer.get_image_type(),
+                image_type=self._image_renderer.get_image_type(),
             )
 
             response = self._image_client.get(config)
 
             if response is None:
                 raise ValueError("Failed to get image from server.")
+
+            if not (100 <= response.status_code <= 299):
+                raise ValueError(
+                    f"Failed to fetch image, status code: {response.status_code}")
 
             if self._clock_service.is_time_set() is False:
                 self._clock_service.set_time_from_header(response.headers)
