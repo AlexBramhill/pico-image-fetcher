@@ -43,6 +43,8 @@ class InteractionController:
             if self._clock_service.is_time_set() is False:
                 self._clock_service.set_time_from_header(response.headers)
 
+            print(response.content)
+            print(len(response.content), "bytes received")
             self._image_renderer.display_image_from_bytes(response.content)
         except Exception as e:
             print("Error fetching and displaying image:", e)
