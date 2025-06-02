@@ -75,9 +75,12 @@ class CronScheduler:
             for callback, cron_value, run_as_fast_as_possible, fail_silently, display_focused, is_display_ready_to_update in self._tasks:
                 now = utime.localtime()
                 if (self._should_skip(display_focused, is_display_ready_to_update)):
+                    print("Skipping task due to display focus or readiness")
                     continue
 
                 if (run_as_fast_as_possible):
+                    print(
+                        "Running a task as fast as possible")
                     self._run_task(
                         callback=callback,
                         fail_silently=fail_silently,
@@ -93,6 +96,11 @@ class CronScheduler:
                 last_time = now
 
     def _should_skip(self, display_focused, is_display_ready_to_update):
+        print("Checking if task should be skipped due to display focus or readiness")
+        if not display_focused:
+            print("Display is not focus")
+        if is_display_ready_to_update() is True:
+            print("is_display_ready_to_update is true")
         return display_focused and (is_display_ready_to_update() is not True)
 
     def _run_task(self,  callback, fail_silently):

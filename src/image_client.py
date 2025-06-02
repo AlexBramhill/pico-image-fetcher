@@ -44,6 +44,8 @@ class ImageClient:
             return "png"
         elif (image_type == IMAGE_TYPE.JPG):
             return "jpg"
+        elif (image_type == IMAGE_TYPE.BMP):
+            return "bmp"
         else:
             raise ValueError(f"Unsupported image type: {image_type}")
 
