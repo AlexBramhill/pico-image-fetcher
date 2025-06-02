@@ -1,6 +1,6 @@
 import machine
 
-from src.calender import MONTH_MAP
+from src.helpers.month_map import MONTH_MAP
 
 
 class ClockService:

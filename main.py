@@ -1,15 +1,13 @@
 import config
-from src.image_renderer.image_renderer_factory import ImageRendererFactory
+from src.image_renderer.factories.image_renderer_factory import ImageRendererFactory
 from src.display.configs.display_configs import display_configs
-from src.display.display_factory import DisplayFactory
+from src.display.factories.display_factory import DisplayFactory
 import secrets
 
-from src.clock_service import ClockService
-from src.image_client import ImageClient
-from src.image_renderer.pimoroni_png_renderer import PimoroniPngRenderer
-from src.image_renderer.pimoroni_jpeg_renderer import PimoroniJpegRenderer
+from src.clock.clock_service import ClockService
+from src.client.image_client import ImageClient
 from src.interaction_controller import InteractionController
-from src.wifi_manager import WiFiManager
+from src.wifi.wifi_manager import WiFiManager
 from src.cron_scheduler import CronScheduler
 
 

@@ -1,8 +1,6 @@
-import time
 import urequests
 import sys
-from src.image_renderer.image_types import IMAGE_TYPE
-from src.image_renderer.image_renderer import ImageRendererAbstract
+from src.enums.image_types import IMAGE_TYPE
 from secrets import URL
 
 

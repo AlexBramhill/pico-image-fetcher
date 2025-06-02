@@ -1,8 +1,8 @@
-from src.display.display import DisplayAbstract
-from src.clock_service import ClockService
-from src.image_client import ImageClient, ImageClientGetConfig
-from src.image_renderer.image_renderer import ImageRendererAbstract
-from src.wifi_manager import WiFiManager
+from src.display.abstract.display_abstract import DisplayAbstract
+from src.clock.clock_service import ClockService
+from src.client.image_client import ImageClient, ImageClientGetConfig
+from src.image_renderer.abstract.image_renderer_abstract import ImageRendererAbstract
+from src.wifi.wifi_manager import WiFiManager
 
 
 class InteractionController:
