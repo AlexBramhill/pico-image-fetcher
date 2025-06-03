@@ -11,7 +11,6 @@ class TaskDispatcher:
         task = next(task_generator)
 
         if task is None:
-            print("No tasks to run.")
             return
 
         try:
@@ -19,13 +18,19 @@ class TaskDispatcher:
         except Exception as e:
             print(f"Error in task {task.name}: {e}")
 
-        # Avoids missing scheduled tasks, but means an infinite backlog can occur
         if not task.should_run_once:
             now = time.ticks_ms()
 
             last_run = task.last_run_in_epoch if task.last_run_in_epoch is not None else now
-            task.next_run_in_epoch = time.ticks_add(
-                last_run, task.run_every_x_ms)
+            print(
+                f"Task {task.name} previous last run at {task.last_run_in_epoch}, now at {last_run}")
+            print(
+                f"Task {task.name} next run in {task.get_ms_to_next_run()} ms")
+            task.next_run_in_epoch = last_run + task.get_ms_to_next_run()
+            print(f"Task {task.name} next run at {task.next_run_in_epoch}")
             task.last_run_in_epoch = now
+            print(f"Task {task.name} last run at {task.last_run_in_epoch}")
 
+            print("Adding task back to the scheduler")
             self.scheduler.add_task(task)
+            print(f"Task {task.name} added back to the scheduler")

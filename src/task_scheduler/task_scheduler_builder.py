@@ -13,11 +13,12 @@ class TaskSchedulerBuilder:
         """
         if not isinstance(task, Task):
             raise TypeError("task must be an instance of TaskAbstract")
+        print(
+            f"Adding task: {task.name}")
         self._tasks.append(task)
         return self
 
     def add_tasks(self, tasks: list[Task]):
-
         for task in tasks:
             self.add_task(task)
         return self

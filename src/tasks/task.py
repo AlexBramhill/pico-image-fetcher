@@ -1,10 +1,13 @@
+import time
+
+
 class Task:
-    def __init__(self, name, callback, run_every_x_ms, should_run_once=False):
+    def __init__(self, name, callback, get_ms_to_next_run, should_run_once=False):
         self.name = name
         self._last_run_in_epoch: int | None = None
-        self._next_run_in_epoch: int | None = None
+        self._next_run_in_epoch: int = time.ticks_ms()
         self.callback = callback
-        self.run_every_x_ms = run_every_x_ms
+        self.get_ms_to_next_run = get_ms_to_next_run
         self.should_run_once = should_run_once
 
     def run(self):

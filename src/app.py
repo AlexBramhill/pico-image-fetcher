@@ -48,11 +48,19 @@ class App:
             Task(
                 name="Fetch and render page",
                 callback=self.interaction_controller.fetch_and_render_page,
-                run_every_x_ms=self.display.get_next_update_time(
-                ) if self.display.get_next_update_time() else 0,
+                get_ms_to_next_run=self._get_last_run,
                 should_run_once=False,
             )
         ]
+
+    def _get_last_run(self):
+        print("--Getting last run time")
+        print("--Next run time:", self.display.get_ms_until_next_update_available())
+        update_time = 0
+
+        return max(update_time, self.display.get_ms_until_next_update_available(
+            # type: ignore
+        )) if self.display.get_ms_until_next_update_available() else update_time
 
     def run(self):
         # Start the event loop here
