@@ -54,8 +54,6 @@ class App:
         ]
 
     def _get_last_run(self):
-        print("--Getting last run time")
-        print("--Next run time:", self.display.get_ms_until_next_update_available())
         update_time = 0
 
         return max(update_time, self.display.get_ms_until_next_update_available(
