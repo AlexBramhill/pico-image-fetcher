@@ -24,6 +24,4 @@ class TaskScheduler:
     def add_task(self, task: Task):
         if not isinstance(task, Task):
             raise TypeError("task must be an instance of Task")
-        print(f"Adding task: {task.name}")
         self.tasks.append(task)
-        print(f"tasks: {len(self.tasks)}")
