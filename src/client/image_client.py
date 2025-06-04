@@ -5,10 +5,11 @@ from secrets import URL
 
 
 class ImageClientGetConfig:
-    def __init__(self, image_type, width, height):
-        self.width = width
-        self.height = height
-        self.image_type = image_type
+    def __init__(self, image_type, image_rotation, width, height):
+        self.width: int = width
+        self.height: int = height
+        self.image_type: int = image_type
+        self.image_rotation: int = image_rotation
 
 
 class ImageClient:
@@ -19,13 +20,14 @@ class ImageClient:
             cls._instance = super(ImageClient, cls).__new__(cls)
         return cls._instance
 
-    def _make_request(self, width=None, height=None, image_format=None, timeout_in_seconds=30):
+    def _make_request(self, width: int, height: int, image_format: str, image_rotation=0, timeout_in_seconds=30):
         url = URL
         params = []
 
         params.append(f"width={width}")
         params.append(f"height={height}")
         params.append(f"format={image_format}")
+        params.append(f"rotation={image_rotation}")
 
         if params:
             url += "?" + "&".join(params)
@@ -52,7 +54,7 @@ class ImageClient:
     def get(self, config: ImageClientGetConfig):
         try:
             return self._make_request(
-                config.width, config.height, self._get_image_type_value(config.image_type))
+                config.width, config.height, self._get_image_type_value(config.image_type), image_rotation=config.image_rotation)
 
         except Exception as e:
             print("ImageClient get error:", e, file=sys.stderr)

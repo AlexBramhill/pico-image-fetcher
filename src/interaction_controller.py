@@ -28,6 +28,7 @@ class InteractionController:
                 width=width,
                 height=height,
                 image_type=self._image_renderer.get_image_type(),
+                image_rotation=self._display.get_default_rotation(),
             )
 
             response = self._image_client.get(config)
