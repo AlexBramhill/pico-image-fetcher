@@ -44,10 +44,6 @@ class WiFiManager:
             self._wlan.disconnect()
             self._wlan.active(False)
             raise
-        finally:
-            # Ensure WLAN is left in a defined state
-            if not self._wlan.isconnected():
-                self._wlan.active(False)
 
     def is_connected(self):
         return self._wlan.isconnected()
