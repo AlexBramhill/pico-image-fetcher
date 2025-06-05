@@ -20,23 +20,34 @@ class WiFiManager:
             self._initialised = True
 
     def connect(self):
-        if not self._wlan.isconnected():
-            print("Connecting to Wi-Fi...", end="")
+        try:
+            if not self._wlan.isconnected():
+                print("Connecting to Wi-Fi...", end="")
 
-            startTime = utime.time()
-            maxWaitTimeInSeconds = 60
+                startTime = utime.time()
+                maxWaitTimeInSeconds = 60
 
-            self._wlan.connect(SSID, PASSWORD)
-            while not self._wlan.isconnected():
-                if (utime.time() > (startTime + maxWaitTimeInSeconds)):
-                    raise RuntimeError(
-                        f"Failed to connect to Wi-Fi within {maxWaitTimeInSeconds} seconds.")
-                utime.sleep(0.5)
-                print(".", end="")
-            print("\nConnected to Wi-Fi!")
-        else:
-            print("Already connected to Wi-Fi.")
-        print("IP:", self._wlan.ifconfig()[0])
+                self._wlan.connect(SSID, PASSWORD)
+                while not self._wlan.isconnected():
+                    if (utime.time() > (startTime + maxWaitTimeInSeconds)):
+                        raise RuntimeError(
+                            f"Failed to connect to Wi-Fi within {maxWaitTimeInSeconds} seconds.")
+                    utime.sleep(0.5)
+                    print(".", end="")
+                print("\nConnected to Wi-Fi!")
+            else:
+                print("Already connected to Wi-Fi.")
+            print("IP:", self._wlan.ifconfig()[0])
+        except Exception as e:
+            print(f"\nWi-Fi connection failed: {e}")
+            print("Resetting WLAN interface...")
+            self._wlan.disconnect()
+            self._wlan.active(False)
+            raise
+        finally:
+            # Ensure WLAN is left in a defined state
+            if not self._wlan.isconnected():
+                self._wlan.active(False)
 
     def is_connected(self):
         return self._wlan.isconnected()
