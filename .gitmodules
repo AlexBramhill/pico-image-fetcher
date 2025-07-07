@@ -1,0 +1,3 @@
+[submodule "submodules/event_loop"]
+	path = submodules/event_loop
+	url = https://github.com/AlexBramhill/pico-event-loop.git
