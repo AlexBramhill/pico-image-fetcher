@@ -1,7 +1,7 @@
 import time
 
-from src.task_scheduler.task_scheduler import TaskScheduler
-from src.task_dispatcher.task_dispatcher import TaskDispatcher
+from src.submodules.event_loop.task_scheduler.task_scheduler import TaskScheduler
+from src.submodules.event_loop.task_dispatcher.task_dispatcher import TaskDispatcher
 
 
 class EventLoop:

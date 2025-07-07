@@ -1,4 +1,4 @@
-from src.task_scheduler.task_scheduler import TaskScheduler
+from src.submodules.event_loop.task_scheduler.task_scheduler import TaskScheduler
 from src.tasks.task import Task
 
 
