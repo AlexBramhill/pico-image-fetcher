@@ -2,7 +2,8 @@ from src.display.abstract.display_abstract import DisplayAbstract
 from src.clock.clock_service import ClockService
 from src.client.image_client import ImageClient, ImageClientGetConfig
 from src.image_renderer.abstract.image_renderer_abstract import ImageRendererAbstract
-from src.wifi.wifi_manager import WiFiManager
+from submodules.wifi_manager import WiFiManager
+from secrets import SSID, PASSWORD
 
 
 class InteractionController:
@@ -21,7 +22,7 @@ class InteractionController:
     def fetch_and_render_page(self):
         try:
             if (self._wifi_manager.is_connected() is False):
-                self._wifi_manager.connect()
+                self._wifi_manager.connect(SSID=SSID, PASSWORD=PASSWORD)
 
             width, height = self._display.get_bounds()
             config = ImageClientGetConfig(

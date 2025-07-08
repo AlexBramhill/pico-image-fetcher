@@ -1,7 +1,8 @@
 import config
 
 from submodules.event_loop import EventLoop, TaskSchedulerBuilder, Task
-from submodules.
+from submodules.wifi_manager import WiFiManager
+
 from src.image_renderer.factories.image_renderer_factory import ImageRendererFactory
 from src.display.configs.display_configs import display_configs
 from src.display.factories.display_factory import DisplayFactory
