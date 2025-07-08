@@ -7,10 +7,7 @@ from src.clock.clock_service import ClockService
 from src.client.image_client import ImageClient
 from src.interaction_controller import InteractionController
 from src.wifi.wifi_manager import WiFiManager
-from src.submodules.event_loop.event_loop.event_loop import EventLoop
-from src.submodules.event_loop.task_dispatcher.task_dispatcher import TaskDispatcher
-from src.submodules.event_loop.task_scheduler.task_scheduler_builder import TaskSchedulerBuilder
-from src.tasks.task import Task
+from submodules.event_loop import EventLoop, TaskSchedulerBuilder, Task
 
 
 class App:
