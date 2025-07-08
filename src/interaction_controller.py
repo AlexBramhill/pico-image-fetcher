@@ -22,7 +22,7 @@ class InteractionController:
     def fetch_and_render_page(self):
         try:
             if (self._wifi_manager.is_connected() is False):
-                self._wifi_manager.connect(SSID=SSID, PASSWORD=PASSWORD)
+                self._wifi_manager.connect(ssid=SSID, password=PASSWORD)
 
             width, height = self._display.get_bounds()
             config = ImageClientGetConfig(
