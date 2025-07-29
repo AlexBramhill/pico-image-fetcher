@@ -3,10 +3,11 @@ import config
 from submodules.event_loop import EventLoop, TaskSchedulerBuilder, Task
 from submodules.wifi_manager import WiFiManager
 from submodules.clock_service import ClockService
+from submodules.displays import ImageRendererFactory, DisplayFactory, display_configs
 
-from src.image_renderer.factories.image_renderer_factory import ImageRendererFactory
-from src.display.configs.display_configs import display_configs
-from src.display.factories.display_factory import DisplayFactory
+# from src.image_renderer.factories.image_renderer_factory import ImageRendererFactory
+# from src.display.configs.display_configs import display_configs
+# from src.display.factories.display_factory import DisplayFactory
 
 from src.client.image_client import ImageClient
 from src.interaction_controller import InteractionController

@@ -1,7 +1,6 @@
 import urequests
 import sys
-from src.enums.image_types import IMAGE_TYPE
-from src.enums.colour_profiles import COLOUR_PROFILE
+from submodules.displays import IMAGE_TYPE, COLOUR_PROFILE
 from secrets import URL
 
 
