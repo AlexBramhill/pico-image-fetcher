@@ -1,4 +1,4 @@
-# Pico
+# Pico Image Fetcher
 
 Handles display of received images from a given url.
  
