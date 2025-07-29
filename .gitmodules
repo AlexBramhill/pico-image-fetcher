@@ -4,3 +4,6 @@
 [submodule "submodules/wifi_manager"]
 	path = submodules/wifi_manager
 	url = https://github.com/AlexBramhill/pico-wifi-manager.git
+[submodule "submodules/clock_service"]
+	path = submodules/clock_service
+	url = https://github.com/AlexBramhill/pico-clock-service.git
