@@ -7,3 +7,6 @@
 [submodule "submodules/clock_service"]
 	path = submodules/clock_service
 	url = https://github.com/AlexBramhill/pico-clock-service.git
+[submodule "submodules/displays"]
+	path = submodules/displays
+	url = https://github.com/AlexBramhill/pico-displays.git
