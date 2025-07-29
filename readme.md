@@ -9,7 +9,7 @@ Includes a configurable event loop to handle calls, as well as easy to configure
 Utilises Pimoroni firmware for their inclusion of Pimoroni screen drivers, although should be able to work on non-specific firmware with mild modifications
 
 # Get started
-`git clone --recurse-submodules https://github.com/youruser/my-pico-project`
+`git clone --recurse-submodules https://github.com/AlexBramhill/pico-image-fetcher`
 
 ## Setup
 
