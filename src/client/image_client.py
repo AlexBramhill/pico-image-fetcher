@@ -31,15 +31,10 @@ class ImageClient:
         params.append(f"colour_profile={colour_profile}")
         params.append(f"rotation={image_rotation}")
 
-        if params:
-            url += "?" + "&".join(params)
+        url += "?" + "&".join(params)
 
         print("Making request to URL:", url)
-        response = urequests.get(url, timeout=timeout_in_seconds)
-        if not response:
-            raise ValueError("Failed to get response from server.")
-
-        return response
+        return urequests.get(url, timeout=timeout_in_seconds)
 
     def _get_image_type_value(self, image_type: int):
         if (image_type == IMAGE_TYPE.PNG):

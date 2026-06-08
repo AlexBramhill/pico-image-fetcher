@@ -1,7 +1,8 @@
-from submodules.displays.display.abstract.display_abstract import DisplayAbstract
+import config
+
+from submodules.displays.abstract.display_base import DisplayBase
 from submodules.clock_service.clock_service import ClockService
 from src.client.image_client import ImageClient, ImageClientGetConfig
-from submodules.displays.image_renderer.abstract.image_renderer_abstract import ImageRendererAbstract
 from submodules.wifi_manager import WiFiManager
 from secrets import SSID, PASSWORD
 
@@ -10,30 +11,27 @@ class InteractionController:
     def __init__(self,
                  wifi_manager: WiFiManager,
                  image_client: ImageClient,
-                 display: DisplayAbstract,
-                 image_renderer: ImageRendererAbstract,
+                 display: DisplayBase,
                  clock_service: ClockService):
         self._wifi_manager = wifi_manager
         self._image_client = image_client
         self._display = display
-        self._image_renderer = image_renderer
         self._clock_service = clock_service
 
     def fetch_and_render_page(self):
         try:
-            if (self._wifi_manager.is_connected() is False):
+            if not self._wifi_manager.is_connected():
                 self._wifi_manager.connect(ssid=SSID, password=PASSWORD)
 
-            width, height = self._display.get_bounds()
-            config = ImageClientGetConfig(
-                width=width,
-                height=height,
-                image_type=self._image_renderer.get_image_type(),
-                image_rotation=self._display.get_default_rotation(),
-                colour_profile=self._display.get_colour_profile()
+            request_config = ImageClientGetConfig(
+                width=config.IMAGE_WIDTH,
+                height=config.IMAGE_HEIGHT,
+                image_type=config.IMAGE_FORMAT,
+                image_rotation=config.IMAGE_ROTATION,
+                colour_profile=config.COLOUR_PROFILE_TO_USE,
             )
 
-            response = self._image_client.get(config)
+            response = self._image_client.get(request_config)
 
             if response is None:
                 raise ValueError("Failed to get image from server.")
@@ -42,9 +40,9 @@ class InteractionController:
                 raise ValueError(
                     f"Failed to fetch image, status code: {response.status_code}")
 
-            if self._clock_service.is_time_set() is False:
+            if not self._clock_service.is_time_set():
                 self._clock_service.set_time_from_header(response.headers)
 
-            self._image_renderer.display_image_from_bytes(response.content)
+            self._display.draw_image(response.content, config.IMAGE_FORMAT, config.COLOUR_PROFILE_TO_USE)
         except Exception as e:
             print("Error fetching and displaying image:", e)
