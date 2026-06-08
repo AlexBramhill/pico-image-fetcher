@@ -44,10 +44,7 @@ class App:
             Task(
                 name="Fetch and render page",
                 callback=self.interaction_controller.fetch_and_render_page,
-                get_ms_to_next_run=lambda: max(
-                    0,
-                    self.display.get_ms_until_next_update_available()  # type: ignore
-                ) if self.display.get_ms_until_next_update_available() else 0,
+                get_ms_to_next_run=lambda: max(0, self.display.get_ms_until_next_update_available() or 0),
                 should_run_once=False,
             )
         ]
