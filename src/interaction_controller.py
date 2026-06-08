@@ -1,7 +1,7 @@
-from src.display.abstract.display_abstract import DisplayAbstract
-from src.clock.clock_service import ClockService
+from submodules.displays.display.abstract.display_abstract import DisplayAbstract
+from submodules.clock_service.clock_service import ClockService
 from src.client.image_client import ImageClient, ImageClientGetConfig
-from src.image_renderer.abstract.image_renderer_abstract import ImageRendererAbstract
+from submodules.displays.image_renderer.abstract.image_renderer_abstract import ImageRendererAbstract
 from submodules.wifi_manager import WiFiManager
 from secrets import SSID, PASSWORD
 
